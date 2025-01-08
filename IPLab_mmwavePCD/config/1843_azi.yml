@@ -1,0 +1,54 @@
+Coloradar: False
+
+numTxChan: 3
+numRxChan: 4
+# numAntenna
+numChirpsPerFrame: 128
+frameRate: 10
+framesPerFile: 1
+numAdcSamples: 128
+StartFrequency: 77.0000e+9
+Ideltime: 110.0e-6
+
+range_fftsize: 128
+doppler_fftsize: 128
+angle_fftsize: 128
+
+# range bin size:
+Fs: 10666000
+SamplePerChripUp: 128
+Kr: 1.00000000377e+14
+chirpRampTime: 12.000e-6
+adc_start_time: 7.00e-6
+
+
+
+velocityBinSize: 0.039
+minDisApplyVmaxExtend: 10
+overlapAntenna_ID: []
+refWinSize: [8,4]
+guardWinSize: [8,0]
+K0: [5,3]
+discardCellLeft: 10
+discardCellRight: 20
+maxEnable: 0
+powerThre: 0
+applyVmaxExtend: 0
+method: 1
+
+## field of view to do beamforming
+angles_DOA_az: [-80, 80]
+angles_DOA_ele: [-20,20]
+
+## distance unit in terms of wavelength
+antDis: 0.5117
+
+## 2D matrix providing antenna coordinates (合成虚拟孔径的坐标)
+D: [[0,0],[1,0],[2,0],[3,0],[2,1],[3,1],[4,1],[5,1],[4,0],[5,0],[6,0],[7,0]]
+
+
+sidelobeLevel_dB_azim: 1
+sidelobeLevel_dB_elev: 0
+sidelobeLevel_dB: 1
+gamma: 1.0471
+antenna_azimuthonly: [1,2,3,4,9,10,11,12]
