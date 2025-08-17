@@ -40,7 +40,7 @@ angles_DOA_ele: [-20,20]
 ## distance unit in terms of wavelength
 antDis: 0.5117
 
-## 2D matrix providing antenna coordinates (合成虚拟孔径的坐标)
+
 D: [[0,0],[1,0],[2,0],[3,0],[2,1],[3,1],[4,1],[5,1],[4,0],[5,0],[6,0],[7,0]]
 
 

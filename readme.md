@@ -1,16 +1,10 @@
 
 # DREAM-PCD: Deep Reconstruction and Enhancement of mmWave Radar Pointcloud
 
-[![Project Status: WIP - Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://img.shields.io/badge/Project%20Status-WIP-yellow)](https://github.com/)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Official implementation of *DREAM-PCD: Deep Reconstruction and Enhancement of  mmWave Radar Pointcloud*
-
-
-## Project Status: Under Construction 🚧
-
-
-**Note**: This repository is currently under active development. The code and complete documentation will be released soon.
 
 ---
 
@@ -51,7 +45,7 @@ conda activate IPLabmmWave
 cd IPLab_mmwavePCD
 
 # Install PyTorch (example for CUDA 11.6)
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu116
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/16
 
 # Install this package
 pip install -e .
@@ -80,11 +74,17 @@ You can customize the point cloud generation parameters
 > Note: Change the scene name in the code to visualize different scenarios
 
 
-### Step 
+### Step 2 Generate Dataset
 
-```python
-# comming soon
-```
+- Generate point cloud data for each dataset based on ADC data
+- This repository provides `2023_05_18_17_22_18_cars_30s_1/azi_pcd_normalthr_lq_accumulated`和`2023_05_18_17_25_03_cars_30s_3/azi_pcd_normalthr_lq_accumulated`
+- The code for preparing the dataset can be found in IPLab_mmwavePCD. Please prepare as many scenes as possible to improve generalization ability.
+
+
+### Step 3 Train
+
+- To start training directly, run `main.py`
+
 
 
 ## Citation

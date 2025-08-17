@@ -147,18 +147,18 @@ def create_cuboid_mesh(pt1, pt2, color, thickness=0.1):
     cylinder_radius = thickness / 2
     cylinder_height = length
 
-    # 创建圆柱体
+
     cylinder = o3d.geometry.TriangleMesh.create_cylinder(cylinder_radius, cylinder_height)
     cylinder.compute_vertex_normals()
 
-    # 平移
+
     translation = (pt1 + pt2) / 2
     cylinder.translate(translation, relative=False)
 
-    # 旋转
+
     cylinder.rotate(o3d.geometry.get_rotation_matrix_from_axis_angle(rotation_axis * angle), center=translation)
 
-    # 添加颜色
+
     cylinder.paint_uniform_color(color)
 
     return cylinder
@@ -174,18 +174,18 @@ def create_grid_thick(thickness=0.05):
         [0,0,-5],
         [0,0,5],]
 
-        # y轴刻度
+
     for y in range(-10,10):
         points.append([0.1,y,0])
         points.append([-0.1,y,0])
         
 
-        # x轴刻度
+
     for x in range(-10,10):
         points.append([x,0.1,0])
         points.append([x,-0.1,0])
 
-        # z轴刻度
+
     for z in range(-5,5):
         points.append([0,0.1,z])
         points.append([0,-0.1,z])

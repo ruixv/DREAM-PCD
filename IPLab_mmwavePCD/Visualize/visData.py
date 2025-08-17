@@ -25,8 +25,8 @@ try:
     import torch
 except:
     print("Warning: PyTorch is not installed")
-import mmwavePCD_util
-from Visualize import open3d_extend
+from .. import mmwavePCD_util
+from ..Visualize import open3d_extend
 from pylab import xticks,yticks,np
 import pdb
 from matplotlib.colors import LinearSegmentedColormap
@@ -57,7 +57,7 @@ def plotPcd(pcd, cmp=None, with_grid=True, view_init_angles=None, point_size=5.0
     if cmp is not None:
         pcd_o3d.colors = o3d.utility.Vector3dVector(cmp)
     else: 
-        # 创建自定义颜色映射
+
         cdict = {'red': [(0.0, 0.0, 0.0),
                             (0.5, 0.0, 0.0),
                             (1.0, 0.5, 0.5)],
@@ -68,9 +68,9 @@ def plotPcd(pcd, cmp=None, with_grid=True, view_init_angles=None, point_size=5.0
                             (0.5, 0.5, 0.5),
                             (1.0, 0.0, 0.0)]}
         custom_cmap = LinearSegmentedColormap('custom_cmap', cdict)
-        cmap = plt.cm.get_cmap('turbo')  # 更改为 'viridis' 颜色映射    
+        cmap = plt.cm.get_cmap('turbo')
         pcd_np = np.asarray(pcd_o3d.points)
-        normalized_heights = (pcd_np[:, 2] - pcd_np[:, 2].min()) / (pcd_np[:, 2].max() - pcd_np[:, 2].min())  # 计算归一化高度
+        normalized_heights = (pcd_np[:, 2] - pcd_np[:, 2].min()) / (pcd_np[:, 2].max() - pcd_np[:, 2].min())
         colors = cmap(normalized_heights)
         pcd_o3d.colors = o3d.utility.Vector3dVector(colors[:, :3])
 
@@ -167,11 +167,11 @@ def visualize_point_cloud_on_server(point_cloud, colors=None, filename='pcd_debu
         # Set the title for each subplot based on the index 'i'
         # The title represents the viewpoint for each subplot
         if i == 0:
-            ax.set_title('Top view')       # Set title for the top view (俯视图)
+            ax.set_title('Top view') 
         elif i == 1:
-            ax.set_title('Side view')      # Set title for the side view (侧视图)
+            ax.set_title('Side view')     
         elif i == 2:
-            ax.set_title('Front view')     # Set title for the front view (正视图)
+            ax.set_title('Front view')
         elif i == 3:
             ax.set_title('(45, 30)')       # Set title for the (45, 30) viewpoint
         ax.view_init(azim=azim, elev=elev)
@@ -573,12 +573,12 @@ def plotThreeView_in_getitem(input_B_voxel, input_B_voxel_polar, filename="voxel
     # Plot the three views of the first input image in the top row of subplots
     ax1 = plt.subplot(231)
     ax1.matshow(input_B_voxel_top, cmap=plt.cm.Blues)
-    ax1.set_xlabel('Y') # matshow, x轴 --> 横轴 --> 矩阵的列 --> 对应原voxel的Y
-    ax1.set_ylabel('X') # matshow, Y轴 --> 竖轴 --> 矩阵的行 --> 对应原voxel的X
+    ax1.set_xlabel('Y') 
+    ax1.set_ylabel('X') 
     plt.title("input_B_voxel_top")
     ax2 = plt.subplot(232)
     ax2.matshow(input_B_voxel_front, cmap=plt.cm.Blues)
-    # 去掉Y轴，先Z后X
+
     ax2.set_xlabel('Z')
     ax2.set_ylabel('X')
     plt.title("input_B_voxel_front")
@@ -610,14 +610,7 @@ def plotThreeView_in_getitem(input_B_voxel, input_B_voxel_polar, filename="voxel
     # Close the plot to free up memory
     plt.close()
 
-def plot_pose(position, angle):
-    """
-    可视化激光雷达/毫米波雷达的位置和角度
-    input: position 雷达所在的位置(px,py,pz)
-            angle: 雷达的角度(四元数)q=(x,y,z,w)
-    function: 在3D空间中用箭头绘制出雷达/激光雷达所在的位置和平行于距离向的法线方向(即与方位向和俯仰向垂直的法线)
-    """
-    return 
+
 
 
 def scatterPcds(point_cloud_1, point_cloud_2, colors=None, filename='pcd_debug.png'):
@@ -654,11 +647,11 @@ def scatterPcds(point_cloud_1, point_cloud_2, colors=None, filename='pcd_debug.p
         # Set the title for each subplot based on the index 'i'
         # The title represents the viewpoint for each subplot
         if i == 0:
-            ax.set_title('Top view')       # Set title for the top view (俯视图)
+            ax.set_title('Top view') 
         elif i == 1:
-            ax.set_title('Side view')      # Set title for the side view (侧视图)
+            ax.set_title('Side view') 
         elif i == 2:
-            ax.set_title('Front view')     # Set title for the front view (正视图)
+            ax.set_title('Front view') 
         elif i == 3:
             ax.set_title('(45, 30)')       # Set title for the (45, 30) viewpoint
         ax.view_init(azim=azim, elev=elev)

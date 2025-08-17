@@ -153,7 +153,7 @@ def CFAR(input,opt,debug=False):
     for i_obj in range(1,N_obj+1):
         xind = (Ind_obj[i_obj-1,0]-1) +1
         detection_results[i_obj] = {'rangeInd':Ind_obj[i_obj-1, 0] - 1}
-        # 需要+1
+
         detection_results[i_obj]['range'] = (detection_results[i_obj]['rangeInd'] + 1) * opt.rangeBinSize  # range estimation
         dopplerInd  = Ind_obj[i_obj-1, 1] - 1 # Doppler index
         detection_results[i_obj]['dopplerInd_org'] = dopplerInd
@@ -190,6 +190,7 @@ def CFAR(input,opt,debug=False):
           detection_results[i_obj]['doppler_corr_FFT'] = detection_results[i_obj]['doppler_corr']
 
   return detection_results
+
 
 
 
@@ -423,7 +424,7 @@ def CFAR_CASO_Doppler_overlap(sig_integ,Ind_obj_Rag,sigCpml,opt):
     ind_range = Ind_obj[i_obj-1,0]
     ind_Dop = Ind_obj[i_obj-1,1]
     # skip detected points with signal power less than obj.powerThre
-    # ToDO: check ind_range和ind_Dop从0开始(同python)?
+
     
     if (min(np.abs(sigCpml[ind_range, ind_Dop,:]) ** 2) < opt.powerThre):
         continue
@@ -488,7 +489,7 @@ def DOA(detected_obj,opt, output_est_results = True):
       for i_obj in range(1,DOA_angles.shape[0]+1):
           
           if DOA_angles.size == 0:
-            # 即 DOA_angles = np.array([[]])
+
             break
           numAoAObjCnt = numAoAObjCnt+1
           
@@ -691,7 +692,7 @@ def DOA_beamformingFFT_2D(sig, opt, index="a", output_est_results = True):
       peakVal_elev, peakLoc_elev = DOA_BF_PeakDet_loc(spec_elev, opt)
       # calcualte the angle values
       for j_elev in range(1, 1+ peakVal_elev.size):
-        # 角度
+
         azim_est = (math.asin(wx_vec[(ind-1).astype(int)]/(2*pi*d)))/(2*math.pi)*360
         # pdb.set_trace()
         # print(azim_est)
@@ -829,7 +830,7 @@ def pcdOutput(sig_integrate,detection_results,angleEst, DopplerFFTOut, opt):
   
   if len(angleEst) > 0:
     for iobj in range(1,len(angleEst)+1):
-      angles_all_points[iobj-1][0:2] = angleEst[iobj]['angles'][0:2]  # 方位、俯仰、索引
+      angles_all_points[iobj-1][0:2] = angleEst[iobj]['angles'][0:2] 
       angles_all_points[iobj-1][2] = angleEst[iobj]['estSNR']
       angles_all_points[iobj-1][3] = angleEst[iobj]['rangeInd']
       angles_all_points[iobj-1][4] = angleEst[iobj]['doppler_corr']
@@ -1030,7 +1031,7 @@ def adc2pcd_peakdetection(radar_adc_data,radar_config):
     FinalElevFFTOut = np.zeros((radar_config.range_fftsize,radar_config.doppler_fftsize,radar_config.angle_fftsize,radar_config.angle_fftsize),dtype=complex)
     FinalElevFFTOut = np.fft.fftshift(np.fft.fft(AziFFTOut, radar_config.angle_fftsize, axis=3), axes=3)
 
-    # 依次对距离、速度、方位角、俯仰角 做 FFT
+
     fp_range = findpeaks.findpeaks(method='topology', whitelist=['peak'], lookahead=200, interpolate=None, limit=0.1, imsize=None, scale=True, togray=True, denoise='fastnl', window=3, cu=0.25, params_caerus={'minperc': 3, 'nlargest': 10, 'threshold': 0.25, 'window': 50}, figsize=(15, 8), verbose=3)
 
     fp_doppler = findpeaks.findpeaks(method='topology', whitelist=['peak'], lookahead=10, interpolate=None, limit=0.1, imsize=None, scale=True, togray=True, denoise='fastnl', window=10, cu=0.25, figsize=(15, 8), verbose=3)
@@ -1067,7 +1068,7 @@ def adc2pcd_peakdetection(radar_adc_data,radar_config):
 
         for azi_index_i in range(azi_pos_len):
           azi_index = results_azi["persistence"].y[azi_index_i]
-          if azi_index < 10 or azi_index > 110: # =0的点肯定不对
+          if azi_index < 10 or azi_index > 110:
              continue
           Ele_data = Azi_Ele_data[azi_index, :]
           sig_ele = np.abs(Ele_data)/np.max(np.abs(Ele_data))

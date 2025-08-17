@@ -14,7 +14,7 @@ import numpy as np
 import pdb
 from scipy.interpolate import interp1d
 from scipy.spatial.transform import Slerp, Rotation
-from Visualize import visData
+from ..Visualize import visData
 
 ADC_EXTENSIONS = ['.mat', '.MAT', 'bin', 'BIN', "jpg", "JPG","png","PNG", "npy"]
 
@@ -82,6 +82,7 @@ def make_pcd_dataset(dir):
         final_adcs.append(versions[highest_version])
 
     return final_adcs
+
 
 def make_selfmade_pcd_dataset(radar_dir, lidar_dir, camera_dir, radar_config):
     """
@@ -155,7 +156,7 @@ def make_selfmade_pcd_dataset(radar_dir, lidar_dir, camera_dir, radar_config):
         print('%s and %s have different lenght, meaning radar collection ERROR!' % (radar_path[0], radar_timestamps[0]))
         radar_path = radar_path[:len(radar_timestamps)]
 
-    # 插值
+
     radar_timestamps_interpolated_count = radar_config.framesPerFile
     
     if radar_timestamps_interpolated_count == 1:
@@ -165,7 +166,7 @@ def make_selfmade_pcd_dataset(radar_dir, lidar_dir, camera_dir, radar_config):
         radar_timestamps_upsampled = upsample_timestamps(radar_timestamps, upsample_factor=radar_timestamps_interpolated_count+1)
         radar_path_upsamplesd = interpolate_filenames(radar_path, upsample_factor=radar_timestamps_interpolated_count+1)
 
-    # 如果相机和激光雷达帧率相近,则直接匹配
+
     radar_frame_number = len(radar_path) * radar_timestamps_interpolated_count
     lidar_frame_number = len(lidar_path)
 
@@ -200,7 +201,7 @@ def make_selfmade_pcd_dataset(radar_dir, lidar_dir, camera_dir, radar_config):
         radar_path_final_upsampled = radar_path_final
         timestamps_radar_final_upsampled = timestamps_radar_final
     
-    # 若不相近,则需要插值
+
     else:
         print("radar and lidar and camera has different frame rate")
         # radar_timestamps_upsampled
@@ -219,61 +220,61 @@ from scipy.interpolate import interp1d
 from scipy.spatial.transform import Slerp, Rotation
 
 def align_timestamps_positions_angles(camera_timestamps, positions, angles, radar_timestamps_ele, radar_PCDpaths_ele):
-    # 将输入的时间戳列表转换为 NumPy 数组
+
     camera_timestamps = np.array(camera_timestamps)
     radar_timestamps_ele = np.array(radar_timestamps_ele)
 
-    # 检查并去除重复的时间戳及其对应的位置和角度数据
+
     unique_indices = np.unique(camera_timestamps, return_index=True)[1]
     camera_timestamps = camera_timestamps[unique_indices]
     positions = positions[unique_indices]
     angles = angles[unique_indices]
 
-    # 创建位置插值函数
+
     positions_interpolator = interp1d(camera_timestamps, positions, axis=0, kind='linear', fill_value='extrapolate')
 
-    # 确保雷达时间戳在相机时间戳范围内
+
     valid_radar_ele_index = (radar_timestamps_ele >= camera_timestamps[0]) & (radar_timestamps_ele <= camera_timestamps[-1])
     radar_timestamps_ele = radar_timestamps_ele[valid_radar_ele_index]
     # radar_path_final_ele = np.array(radar_PCDpaths_ele)[valid_index].tolist()
 
-    # 使用雷达时间戳计算插值后的位置
+
     positions_radar_final_ele = positions_interpolator(radar_timestamps_ele)
 
-    # 将四元数转换为 Rotation 对象
+
     rotations = Rotation.from_quat(angles)
 
-    # 创建 Slerp 插值对象
+
     slerp_interpolator = Slerp(camera_timestamps, rotations)
 
-    # 使用雷达时间戳计算插值后的旋转
+
     rotations_radar_final_ele = slerp_interpolator(radar_timestamps_ele)
 
-    # 将旋转结果转换回四元数
+
     angles_radar_final_ele = rotations_radar_final_ele.as_quat()
 
 
-    # 返回雷达时间戳、雷达文件路径、位置和角度
+
     # return radar_timestamps_ele, radar_path_final_ele, positions_radar_final_ele, angles_radar_final_ele
     return radar_timestamps_ele, valid_radar_ele_index, positions_radar_final_ele, angles_radar_final_ele
 
 
 
 def correct_positions(camera_timestamps, positions, reference_timestamps, reference_positions):
-    # 首先，我们需要创建一个线性插值函数，该函数将基于参考相机的时间戳和位置信息进行插值。
+
     interp_function = interp1d(reference_timestamps, reference_positions, axis=0, kind='linear', bounds_error=False, fill_value='extrapolate')
 
-    # 然后，我们可以使用插值函数来计算相机1的时间戳下的参考位置。
+
     interpolated_reference_positions = interp_function(camera_timestamps)
 
-    # 计算相机1的位置信息与插值得到的参考位置之间的差值（偏差）。
+
     position_deltas = interpolated_reference_positions - positions
 
-    # 对偏差进行平滑处理。这里我们使用简单的加权平均值，你可以根据具体情况选择更复杂的平滑方法。
+
     smoothing_factor = 0.8
     smoothed_position_deltas = smoothing_factor * position_deltas + (1 - smoothing_factor) * position_deltas.mean(axis=0)
 
-    # 将平滑处理后的偏差加回到插值得到的参考位置，得到矫正后的位置信息。
+
     positions_corrected = positions + smoothed_position_deltas
 
     return interpolated_reference_positions
@@ -550,7 +551,7 @@ def make_selfmade_pcd_dataset_newcoherent(radar_path_azi, radar_path_ele, lidar_
     angles_camera_final = []
     timestamps_camera_final = []
 
-    # 保存雷达ADC数据，并整理时间戳
+
 
     # Read timestamps from the corresponding files
     with open(os.path.join(lidar_dir, 'timestamp.txt')) as f:
@@ -600,7 +601,7 @@ def make_selfmade_pcd_dataset_newcoherent(radar_path_azi, radar_path_ele, lidar_
         print('%s and %s have different lenght, meaning radar collection ERROR!' % (radar_path[0], radar_timestamps[0]))
         radar_path = radar_path[:len(radar_timestamps)]
 
-    # 插值
+
     radar_timestamps_interpolated_count = radar_config.framesPerFile
     if radar_timestamps_interpolated_count == 1:
         radar_timestamps_upsampled = radar_timestamps
@@ -610,7 +611,7 @@ def make_selfmade_pcd_dataset_newcoherent(radar_path_azi, radar_path_ele, lidar_
         radar_path_upsamplesd = interpolate_filenames(radar_path, upsample_factor=radar_timestamps_interpolated_count*16+1)
         # pdb.set_trace()
 
-    # 如果相机和激光雷达帧率相近,则直接匹配
+
     radar_frame_number = len(radar_path) * radar_timestamps_interpolated_count
     lidar_frame_number = len(lidar_path)
 
@@ -645,7 +646,7 @@ def make_selfmade_pcd_dataset_newcoherent(radar_path_azi, radar_path_ele, lidar_
         radar_path_final_upsampled = radar_path_final
         timestamps_radar_final_upsampled = timestamps_radar_final
     
-    # 若不相近,则需要插值
+
     else:
         print("radar and lidar and camera has different frame rate")
         # radar_timestamps_upsampled
@@ -699,7 +700,7 @@ def align_timestamps(radar_timestamps_upsampled, lidar_timestamps, camera_timest
     angles_final = angles[camera_start_idx:camera_end_idx+1]
     velocitys_final = velocitys[camera_start_idx:camera_end_idx+1]
 
-    # 对每一个相机帧, 找到最对应的雷达和lidar帧,以获得 radar_path_final, lidar_path_final, timestamps_radar_final, timestamps_lidar_final
+
     radar_path_final = []
     lidar_path_final = []
     timestamps_radar_final = []
@@ -712,7 +713,7 @@ def align_timestamps(radar_timestamps_upsampled, lidar_timestamps, camera_timest
         timestamps_radar_final.append(aligned_radar_timestamps[radar_idx])
         timestamps_lidar_final.append(aligned_lidar_timestamps[lidar_idx])
     
-    # 对每一个雷达帧, 根据相机时间戳 进行 位置 角度 和 速度 插值, 以获得 positions_final_upsampled, angles_final_upsampled, velocitys_final_upsampled, timestamps_camera_final_upsampled
+
     positions_final_upsampled = []
     angles_final_upsampled = []
     velocitys_final_upsampled = []
